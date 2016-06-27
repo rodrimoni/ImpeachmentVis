@@ -490,8 +490,10 @@ var margin = {top: 20, right: 55, bottom: 30, left: 40},
         {
           var id = '#' + d;
           //alert(id);
-          $('.district').hide();
-          $(id).show(); 
+          $('.deputies').hide();
+          $(id).show();
+          $(id).mixItUp();
+          $("#todos").addClass('active'); 
           $('html, body').animate({ scrollTop: $(id).offset().top }, 'slow');
         }
 
@@ -520,32 +522,9 @@ var margin = {top: 20, right: 55, bottom: 30, left: 40},
 
 <script>
 
-$(document).ready(function(){
-  $("#deputies").mixItUp();
-});
-
 </script>
 
 <style>
-.row li {
-  width: 25%;
-  float: left;
-  padding: 55px;
-}
-
-ul 
-{
-  list-style-type: none;
-}
-
-img {
-  border: 0 none;
-  display: inline-block;
-  height: auto;
-  max-width: 100%;
-  vertical-align: middle;
-}
-
 .sim {
     display:inline-block;
     position: relative;
@@ -684,6 +663,7 @@ img {
       <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Partido
       <span class="caret"></span></button>
       <ul class="dropdown-menu">
+        <li><a href="javascript:;" data-filter="all" class="active filter">Todos Partidos</a></li>
         <?php foreach ($parties as $p):?> 
             <li> <a href="javascript:;" data-filter = <?php echo "'." . $p  . "'" ?> class="filter"> <?php echo $p ?> </a></li>
         <?php endforeach?>
@@ -703,52 +683,29 @@ img {
       <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Gênero
       <span class="caret"></span></button>
       <ul class="dropdown-menu">
-        <li><a href="#">Masculino</a></li>
-        <li><a href="#">Feminino</a></li>
+        <li> <a href="javascript:;" data-filter = '.Masculino' class="filter"> Masculino </a></li>
+        <li> <a href="javascript:;" data-filter = '.Feminino' class="filter"> Feminino </a></li>
       </ul>
     </div> 
   </div>
   <?php
-  echo "<div class = 'deputies' id = 'deputies'>";
+
+  //echo "<div class = 'deputies'>";
 
   foreach ($deputiesByState as $key => $value) {
-    $control = 0;
-    echo "<div id = " . "'" . $key . "'" . " class = 'district' style='display: block;'>";
+    echo "<div class = 'deputies' style='display:none;' id = '" . $key . "'>";
     foreach ($value as $index => $deputy) {
-       if ($control == 0)
-       {
-          echo "<div class='row'>";
-          echo "<div id='small-img' class='col-xs-12 col-sm-12 col-md-12 col-lg-12 center'>";
-          echo "<ul>";
-       }
         $voto = $deputiesAllInfo[$deputy]['Voto'] == "Sim" ? "sim" : "nao"; 
-        echo "<li class = 'mix " . $deputiesAllInfo[$deputy]['Partido'] . "''>";
-        echo "<div class = '" . $voto . " " . $deputiesAllInfo[$deputy]['Partido'] . " " . $deputiesAllInfo[$deputy]['Genero'] .  "'>";
-        echo "<img align='left' class = 'img-rounded' src='img/deputados/" . $deputy . ".jpg'/>";
+        echo "<div class = 'mix ". $deputiesAllInfo[$deputy]['Partido'] . " " . $deputiesAllInfo[$deputy]['Genero'] .  "'>";
+          echo "<div class = '". $voto . "'>";
+            echo "<img align='left' class = 'img-rounded' src='img/deputados/" . $deputy . ".jpg'/>";
+          echo "</div>";
         echo "</div>";
-        echo "<div class = 'text-center'>";
-        echo  utf8_encode($deputiesAllInfo[$deputy]['Deputado']);   
-        echo "<br>";
-        echo "<span style='font-weight: bold;'>";
-        echo $deputiesAllInfo[$deputy]['Partido'];
-        echo "</span>";
-        echo "</div>"; 
-        echo "</li>";
-
-       $control = $control + 1;
-       if ($control == 4 or $index == count($value) - 1)
-       {   
-          echo "</ul>";
-          echo "</div>";
-          echo "</div>";
-          $control = 0;
-       }
     }
-       
-    echo "</div>"; 
+    echo "</div>";
   }
 
-  echo "</div>";
+  //echo "</div>";
 
   $conn->close();
 ?>
@@ -758,10 +715,47 @@ img {
 
 <style>
 
+.deputies{
+  padding: 2% 2% 0;
+  text-align: justify;
+  font-size: 0.1px;
+  
+  -webkit-backface-visibility: hidden;
+}
+
+.deputies:after{
+  content: '';
+  display: inline-block;
+  width: 100%;
+}
+
+.deputies .mix,
+.deputies .gap{
+  display: inline-block;
+  width: 25%;
+}
+
 .deputies .mix{
   text-align: left;
   margin-bottom: 2%;
   display: none;
 }
+
+.deputies .mix:after{
+  content: attr(data-myorder);
+  color: white;
+  font-size: 16px;
+  display: inline-block;
+  vertical-align: top;
+  padding: 4% 6%;
+  font-weight: 700;
+}
+
+.deputies .mix:before{
+  content: '';
+  display: inline-block;
+  padding-top: 60%;
+}
+
 
 </style>
