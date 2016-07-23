@@ -1,31 +1,139 @@
+
+<?php
+  $db = new PDO("sqlite:deps.db");
+  $parties = array();
+  $states = array();
+  $allText = "";
+
+  $queryParty = "SELECT DISTINCT Partido FROM impeatchment order by Partido";
+    foreach ($db->query($queryParty) as $row){
+      $parties[] = $row['Partido'];
+    }
+
+  $queryState = "SELECT DISTINCT Estado FROM impeatchment order by Estado";
+    foreach ($db->query($queryState) as $row){
+      $states[] = $row['Estado'];
+    }
+
+  $queryPhrases = "SELECT Fala FROM impeatchment";
+
+  foreach($db->query($queryPhrases) as $row)
+  {
+    $trash = array(",", "!", ".", ":", ";", "?");
+    $talk = str_replace($trash, "", utf8_decode($row['Fala']));
+    $words = explode(" ", $talk);
+    foreach ($words as $w)
+    {
+      if (strlen($w) > 2)
+      {
+        $w = strtolower($w);
+        if( isset($allText[$w]))
+        {
+          $allText[$w] += 1;
+        }
+        else
+          $allText[$w] = 1;
+      }
+    }
+  }
+
+
+  foreach($allText as $key => $a)
+  {
+    if ($a < 15)
+      unset($allText[$key]);
+  }
+
+  unset($allText['que']);
+  unset($allText['com']);
+  unset($allText['uma']);
+  unset($allText['por']);
+  unset($allText['dos']);
+  unset($allText['das']);
+  unset($allText['nas']);
+  unset($allText['nos']);
+  unset($allText['sem']);
+  unset($allText['nem']);
+  unset($allText['sua']);
+  unset($allText['pela']);
+  unset($allText['pelo']);
+  unset($allText['srs']);
+  unset($allText['sou']);
+  unset($allText['minha']);
+  unset($allText['ela']);
+  unset($allText['isso']);
+  unset($allText['ter']);
+  unset($allText['tem']);
+  unset($allText['sras']);
+  unset($allText['são']);
+  unset($allText['meus']);
+  unset($allText['todos']);
+  unset($allText['para']);
+  unset($allText['esse']);
+  unset($allText['meu']);
+  unset($allText['minhas']);
+  unset($allText['ele']);
+  unset($allText['seu']);
+  unset($allText['nós']);
+  unset($allText['mas']);
+  unset($allText['são']);
+  unset($allText['este']);
+  unset($allText['esta']);
+
+  $finalText = "";
+  foreach ($allText as $key => $value) {
+    $finalText .= str_repeat($key . " ", $value);
+  }
+
+  //$finalText = utf8_encode($finalText);
+
+  //$finalText = explode(" ", $finalText);
+  //var_dump($finalText);
+
+  //exit;
+
+  $svgStaticCreated = "<svg width='960' height='600' version='1.1' xmlns='http://www.w3.org/2000/svg'><g></g><g id = 'cloudWords' transform='translate(480,300)'><text text-anchor='middle' transform='translate(57,-107)rotate(59.99999999999999)' style='font-size: 100px; font-family: Impact; fill: rgb(181, 207, 107);'>voto</text><text text-anchor='middle' transform='translate(175,28)rotate(-59.999999999999986)' style='font-size: 97px; font-family: Impact; fill: rgb(206, 219, 156);'>presidente</text><text text-anchor='middle' transform='translate(-206,-81)rotate(29.999999999999996)' style='font-size: 94px; font-family: Impact; fill: rgb(231, 203, 148);'>meu</text><text text-anchor='middle' transform='translate(202,-176)rotate(-59.99999999999999)' style='font-size: 93px; font-family: Impact; fill: rgb(214, 97, 107);'>não</text><text text-anchor='middle' transform='translate(265,51)rotate(0)' style='font-size: 92px; font-family: Impact; fill: rgb(173, 73, 74);'>sim</text><text text-anchor='middle' transform='translate(13,46)rotate(-29.999999999999993)' style='font-size: 86px; font-family: Impact; fill: rgb(206, 109, 189);'>minha</text><text text-anchor='middle' transform='translate(-71,-24)rotate(-59.99999999999999)' style='font-size: 86px; font-family: Impact; fill: rgb(82, 84, 163);'>brasil</text><text text-anchor='middle' transform='translate(-56,-138)rotate(29.999999999999996)' style='font-size: 80px; font-family: Impact; fill: rgb(57, 59, 121);'>para</text><text text-anchor='middle' transform='translate(2,124)rotate(-29.999999999999996)' style='font-size: 80px; font-family: Impact; fill: rgb(222, 158, 214);'>povo</text><text text-anchor='middle' transform='translate(-215,-176)rotate(0)' style='font-size: 69px; font-family: Impact; fill: rgb(99, 121, 57);'>estado</text><text text-anchor='middle' transform='translate(-199,53)rotate(-59.99999999999999)' style='font-size: 68px; font-family: Impact; fill: rgb(181, 207, 107);'>contra</text><text text-anchor='middle' transform='translate(43,-213)rotate(-29.999999999999996)' style='font-size: 67px; font-family: Impact; fill: rgb(206, 219, 156);'>país</text><text text-anchor='middle' transform='translate(-155,137)rotate(-29.999999999999996)' style='font-size: 65px; font-family: Impact; fill: rgb(222, 158, 214);'>nome</text><text text-anchor='middle' transform='translate(-261,-7)rotate(-29.999999999999993)' style='font-size: 63px; font-family: Impact; fill: rgb(231, 203, 148);'>pelos</text><text text-anchor='middle' transform='translate(209,102)rotate(0)' style='font-size: 62px; font-family: Impact; fill: rgb(132, 60, 57);'>aqui</text><text text-anchor='middle' transform='translate(-200,216)rotate(0)' style='font-size: 60px; font-family: Impact; fill: rgb(57, 59, 121);'>família</text><text text-anchor='middle' transform='translate(-332,130)rotate(29.999999999999996)' style='font-size: 58px; font-family: Impact; fill: rgb(99, 121, 57);'>meus</text><text text-anchor='middle' transform='translate(299,-84)rotate(-59.99999999999999)' style='font-size: 58px; font-family: Impact; fill: rgb(140, 162, 82);'>dilma</text><text text-anchor='middle' transform='translate(-120,165)rotate(59.99999999999999)' style='font-size: 52px; font-family: Impact; fill: rgb(173, 73, 74);'>nós</text><text text-anchor='middle' transform='translate(-47,217)rotate(59.99999999999999)' style='font-size: 50px; font-family: Impact; fill: rgb(156, 158, 222);'>este</text><text text-anchor='middle' transform='translate(345,-90)rotate(-59.999999999999986)' style='font-size: 48px; font-family: Impact; fill: rgb(231, 150, 156);'>aos</text><text text-anchor='middle' transform='translate(-391,151)rotate(29.999999999999996)' style='font-size: 46px; font-family: Impact; fill: rgb(99, 121, 57);'>são</text><text text-anchor='middle' transform='translate(-339,-107)rotate(-59.99999999999999)' style='font-size: 46px; font-family: Impact; fill: rgb(173, 73, 74);'>está</text><text text-anchor='middle' transform='translate(164,150)rotate(-29.999999999999996)' style='font-size: 45px; font-family: Impact; fill: rgb(123, 65, 115);'>mas</text><text text-anchor='middle' transform='translate(133,-236)rotate(-29.999999999999993)' style='font-size: 41px; font-family: Impact; fill: rgb(165, 81, 148);'>srs</text><text text-anchor='middle' transform='translate(-177,79)rotate(-59.99999999999999)' style='font-size: 37px; font-family: Impact; fill: rgb(222, 158, 214);'>tem</text><text text-anchor='middle' transform='translate(-270,45)rotate(-29.999999999999996)' style='font-size: 35px; font-family: Impact; fill: rgb(82, 84, 163);'>rio</text><text text-anchor='middle' transform='translate(-286,-127)rotate(-59.99999999999999)' style='font-size: 33px; font-family: Impact; fill: rgb(82, 84, 163);'>vida</text><text text-anchor='middle' transform='translate(2,162)rotate(0)' style='font-size: 31px; font-family: Impact; fill: rgb(156, 158, 222);'>vai</text><text text-anchor='middle' transform='translate(-227,-230)' style='font-size: 29px; font-family: Impact; fill: rgb(189, 158, 57);'>fora</text><text text-anchor='middle' transform='translate(-43,-3)' style='font-size: 25px; font-family: Impact; fill: rgb(231, 203, 148);'>fazer</text><text text-anchor='middle' transform='translate(75,53)rotate(-29.999999999999996)' style='font-size: 24px; font-family: Impact; fill: rgb(173, 73, 74);'>ter</text><text text-anchor='middle' transform='translate(-13,-33)rotate(29.999999999999996)' style='font-size: 19px; font-family: Impact; fill: rgb(132, 60, 57);'>ela</text><text text-anchor='middle' transform='translate(-241,3)rotate(-59.99999999999999)' style='font-size: 19px; font-family: Impact; fill: rgb(132, 60, 57);'>fim</text><text text-anchor='middle' transform='translate(-145,69)rotate(-59.99999999999999)' style='font-size: 19px; font-family: Impact; fill: rgb(231, 203, 148);'>pai</text><text text-anchor='middle' transform='translate(-219,-12)rotate(-59.99999999999999)' style='font-size: 11px; font-family: Impact; fill: rgb(173, 73, 74);'>essa</text><text text-anchor='middle' transform='translate(-107,-131)rotate(-29.999999999999996)' style='font-size: 10px; font-family: Impact; fill: rgb(123, 65, 115);'>tão</text><text text-anchor='middle' transform='translate(145,100)rotate(-59.99999999999999)' style='font-size: 10px; font-family: Impact; fill: rgb(206, 109, 189);'>ele</text><text text-anchor='middle' transform='translate(-149,-137)' style='font-size: 33px; font-family: Impact; fill: rgb(156, 158, 222);'>favor</text><text text-anchor='middle' transform='translate(244,186)rotate(-30)' style='font-size: 59px; font-family: Impact; fill: rgb(82, 84, 163);'>respeito</text><text text-anchor='middle' transform='translate(-346,66)rotate(30)' style='font-size: 56px; font-family: Impact; fill: rgb(181, 207, 107);'>nosso</text><text text-anchor='middle' transform='translate(-379,-22)rotate(0)' style='font-size: 56px; font-family: Impact; fill: rgb(206, 219, 156);'>golpe</text><text text-anchor='middle' transform='translate(343,9)rotate(60)' style='font-size: 54px; font-family: Impact; fill: rgb(140, 109, 49);'>todos</text><text text-anchor='middle' transform='translate(-336,205)rotate(-60)' style='font-size: 49px; font-family: Impact; fill: rgb(189, 158, 57);'>quero</text><text text-anchor='middle' transform='translate(17,-53)rotate(0)' style='font-size: 49px; font-family: Impact; fill: rgb(231, 186, 82);'>mais</text><text text-anchor='middle' transform='translate(-329,-210)rotate(-30)' style='font-size: 48px; font-family: Impact; fill: rgb(231, 203, 148);'>deputados</text><text text-anchor='middle' transform='translate(-298,-63)rotate(0)' style='font-size: 47px; font-family: Impact; fill: rgb(132, 60, 57);'>casa</text><text text-anchor='middle' transform='translate(245,-230)rotate(60)' style='font-size: 46px; font-family: Impact; fill: rgb(140, 162, 82);'>hoje</text><text text-anchor='middle' transform='translate(346,174)rotate(-30)' style='font-size: 46px; font-family: Impact; fill: rgb(181, 207, 107);'>corrupção</text><text text-anchor='middle' transform='translate(-105,-239)rotate(30)' style='font-size: 45px; font-family: Impact; fill: rgb(99, 121, 57);'>defesa</text><text text-anchor='middle' transform='translate(350,97)rotate(0)' style='font-size: 45px; font-family: Impact; fill: rgb(156, 158, 222);'>partido</text><text text-anchor='middle' transform='translate(-382,-114)rotate(-60)' style='font-size: 43px; font-family: Impact; fill: rgb(206, 219, 156);'>isso</text><text text-anchor='middle' transform='translate(396,-63)rotate(30)' style='font-size: 43px; font-family: Impact; fill: rgb(140, 109, 49);'>como</text><text text-anchor='middle' transform='translate(310,-193)rotate(60)' style='font-size: 43px; font-family: Impact; fill: rgb(189, 158, 57);'>deus</text><text text-anchor='middle' transform='translate(396,4)rotate(60)' style='font-size: 42px; font-family: Impact; fill: rgb(107, 110, 207);'>cidade</text><text text-anchor='middle' transform='translate(71,252)rotate(0)' style='font-size: 40px; font-family: Impact; fill: rgb(214, 97, 107);'>governo</text><text text-anchor='middle' transform='translate(-29,-260)rotate(0)' style='font-size: 40px; font-family: Impact; fill: rgb(140, 162, 82);'>neste</text><text text-anchor='middle' transform='translate(378,-144)rotate(60)' style='font-size: 39px; font-family: Impact; fill: rgb(231, 150, 156);'>filhos</text><text text-anchor='middle' transform='translate(368,224)rotate(-60)' style='font-size: 39px; font-family: Impact; fill: rgb(206, 219, 156);'>estão</text><text text-anchor='middle' transform='translate(-274,251)rotate(0)' style='font-size: 39px; font-family: Impact; fill: rgb(181, 207, 107);'>crime</text><text text-anchor='middle' transform='translate(-398,86)rotate(-60)' style='font-size: 38px; font-family: Impact; fill: rgb(165, 81, 148);'>dizer</text><text text-anchor='middle' transform='translate(331,-243)rotate(30)' style='font-size: 38px; font-family: Impact; fill: rgb(132, 60, 57);'>querida</text><text text-anchor='middle' transform='translate(399,-233)rotate(60)' style='font-size: 38px; font-family: Impact; fill: rgb(123, 65, 115);'>futuro</text><text text-anchor='middle' transform='translate(-85,234)rotate(60)' style='font-size: 38px; font-family: Impact; fill: rgb(140, 109, 49);'>ruas</text><text text-anchor='middle' transform='translate(-413,186)rotate(60)' style='font-size: 37px; font-family: Impact; fill: rgb(206, 109, 189);'>sras</text><text text-anchor='middle' transform='translate(92,-197)rotate(60)' style='font-size: 36px; font-family: Impact; fill: rgb(222, 158, 214);'>esta</text><text text-anchor='middle' transform='translate(-153,266)rotate(0)' style='font-size: 35px; font-family: Impact; fill: rgb(173, 73, 74);'>deputado</text><text text-anchor='middle' transform='translate(237,242)rotate(30)' style='font-size: 35px; font-family: Impact; fill: rgb(57, 59, 121);'>sou</text><text text-anchor='middle' transform='translate(-386,-230)rotate(-30)' style='font-size: 34px; font-family: Impact; fill: rgb(189, 158, 57);'>porque</text><text text-anchor='middle' transform='translate(-200,-252)rotate(30)' style='font-size: 34px; font-family: Impact; fill: rgb(57, 59, 121);'>minas</text><text text-anchor='middle' transform='translate(-415,-273)rotate(0)' style='font-size: 33px; font-family: Impact; fill: rgb(214, 97, 107);'>grande</text><text text-anchor='middle' transform='translate(144,-274)rotate(0)' style='font-size: 33px; font-family: Impact; fill: rgb(231, 203, 148);'>nossa</text><text text-anchor='middle' transform='translate(183,267)rotate(0)' style='font-size: 31px; font-family: Impact; fill: rgb(181, 207, 107);'>votar</text><text text-anchor='middle' transform='translate(221,145)rotate(-30)' style='font-size: 31px; font-family: Impact; fill: rgb(206, 219, 156);'>ser</text><text text-anchor='middle' transform='translate(140,195)rotate(-30)' style='font-size: 29px; font-family: Impact; fill: rgb(99, 121, 57);'>muito</text><text text-anchor='middle' transform='translate(432,-133)rotate(60)' style='font-size: 27px; font-family: Impact; fill: rgb(231, 186, 82);'>temer</text><text text-anchor='middle' transform='translate(422,180)rotate(60)' style='font-size: 27px; font-family: Impact; fill: rgb(231, 186, 82);'>anos</text><text text-anchor='middle' transform='translate(334,122)rotate(60)' style='font-size: 25px; font-family: Impact; fill: rgb(181, 207, 107);'>foi</text><text text-anchor='middle' transform='translate(292,-31)rotate(60)' style='font-size: 25px; font-family: Impact; fill: rgb(132, 60, 57);'>vou</text><text text-anchor='middle' transform='translate(-326,-156)rotate(30)' style='font-size: 23px; font-family: Impact; fill: rgb(231, 203, 148);'>luta</text><text text-anchor='middle' transform='translate(-408,10)rotate(-60)' style='font-size: 22px; font-family: Impact; fill: rgb(214, 97, 107);'>bahia</text><text text-anchor='middle' transform='translate(-9,193)rotate(60)' style='font-size: 22px; font-family: Impact; fill: rgb(206, 219, 156);'>seu</text><text text-anchor='middle' transform='translate(331,215)rotate(-60)' style='font-size: 21px; font-family: Impact; fill: rgb(140, 109, 49);'>toda</text><text text-anchor='middle' transform='translate(262,276)rotate(0)' style='font-size: 21px; font-family: Impact; fill: rgb(231, 150, 156);'>primeiro</text><text text-anchor='middle' transform='translate(232,-275)rotate(-30)' style='font-size: 20px; font-family: Impact; fill: rgb(206, 109, 189);'>tenho</text><text text-anchor='middle' transform='translate(-305,196)rotate(-60)' style='font-size: 20px; font-family: Impact; fill: rgb(165, 81, 148);'>história</text><text text-anchor='middle' transform='translate(-429,223)rotate(30)' style='font-size: 20px; font-family: Impact; fill: rgb(123, 65, 115);'>maioria</text><text text-anchor='middle' transform='translate(405,257)rotate(-60)' style='font-size: 19px; font-family: Impact; fill: rgb(222, 158, 214);'>janeiro</text><text text-anchor='middle' transform='translate(-127,-225)rotate(30)' style='font-size: 19px; font-family: Impact; fill: rgb(123, 65, 115);'>região</text><text text-anchor='middle' transform='translate(-431,-115)rotate(-60)' style='font-size: 19px; font-family: Impact; fill: rgb(82, 84, 163);'>mulher</text><text text-anchor='middle' transform='translate(-418,252)rotate(30)' style='font-size: 19px; font-family: Impact; fill: rgb(57, 59, 121);'>cometeu</text><text text-anchor='middle' transform='translate(-440,-67)rotate(-60)' style='font-size: 18px; font-family: Impact; fill: rgb(107, 110, 207);'>votos</text><text text-anchor='middle' transform='translate(-135,-120)rotate(0)' style='font-size: 18px; font-family: Impact; fill: rgb(156, 158, 222);'>digo</text><text text-anchor='middle' transform='translate(-45,-39)rotate(60)' style='font-size: 18px; font-family: Impact; fill: rgb(173, 73, 74);'>dia</text><text text-anchor='middle' transform='translate(35,-101)rotate(30)' style='font-size: 17px; font-family: Impact; fill: rgb(140, 109, 49);'>mim</text><text text-anchor='middle' transform='translate(281,236)rotate(60)' style='font-size: 17px; font-family: Impact; fill: rgb(140, 162, 82);'>filho</text><text text-anchor='middle' transform='translate(-171,230)rotate(0)' style='font-size: 17px; font-family: Impact; fill: rgb(206, 219, 156);'>estamos</text><text text-anchor='middle' transform='translate(-7,272)rotate(60)' style='font-size: 17px; font-family: Impact; fill: rgb(181, 207, 107);'>todo</text><text text-anchor='middle' transform='translate(-187,-58)rotate(0)' style='font-size: 15px; font-family: Impact; fill: rgb(231, 186, 82);'>bem</text><text text-anchor='middle' transform='translate(301,63)rotate(0)' style='font-size: 15px; font-family: Impact; fill: rgb(132, 60, 57);'>querem</text><text text-anchor='middle' transform='translate(436,-88)rotate(0)' style='font-size: 15px; font-family: Impact; fill: rgb(189, 158, 57);'>direito</text><text text-anchor='middle' transform='translate(443,77)rotate(-60)' style='font-size: 15px; font-family: Impact; fill: rgb(222, 158, 214);'>paraná</text><text text-anchor='middle' transform='translate(23,129)rotate(-30)' style='font-size: 15px; font-family: Impact; fill: rgb(214, 97, 107);'>vamos</text><text text-anchor='middle' transform='translate(-311,-281)rotate(0)' style='font-size: 15px; font-family: Impact; fill: rgb(231, 203, 148);'>aqueles</text><text text-anchor='middle' transform='translate(28,219)rotate(0)' style='font-size: 14px; font-family: Impact; fill: rgb(123, 65, 115);'>quem</text><text text-anchor='middle' transform='translate(428,248)rotate(-60)' style='font-size: 14px; font-family: Impact; fill: rgb(140, 109, 49);'>pernambuco</text><text text-anchor='middle' transform='translate(-114,-106)rotate(0)' style='font-size: 14px; font-family: Impact; fill: rgb(231, 150, 156);'>sul</text><text text-anchor='middle' transform='translate(-439,52)rotate(60)' style='font-size: 14px; font-family: Impact; fill: rgb(231, 150, 156);'>esposa</text><text text-anchor='middle' transform='translate(-155,155)rotate(-30)' style='font-size: 14px; font-family: Impact; fill: rgb(214, 97, 107);'>estou</text><text text-anchor='middle' transform='translate(355,-135)rotate(30)' style='font-size: 14px; font-family: Impact; fill: rgb(165, 81, 148);'>pessoas</text><text text-anchor='middle' transform='translate(61,270)rotate(0)' style='font-size: 14px; font-family: Impact; fill: rgb(173, 73, 74);'>parlamentares</text><text text-anchor='middle' transform='translate(-74,18)rotate(-60)' style='font-size: 13px; font-family: Impact; fill: rgb(140, 162, 82);'>desta</text><text text-anchor='middle' transform='translate(179,50)rotate(60)' style='font-size: 13px; font-family: Impact; fill: rgb(156, 158, 222);'>pará</text><text text-anchor='middle' transform='translate(147,-98)rotate(30)' style='font-size: 13px; font-family: Impact; fill: rgb(99, 121, 57);'>netos</text><text text-anchor='middle' transform='translate(313,255)rotate(60)' style='font-size: 13px; font-family: Impact; fill: rgb(222, 158, 214);'>especial</text><text text-anchor='middle' transform='translate(-322,271)rotate(60)' style='font-size: 13px; font-family: Impact; fill: rgb(206, 109, 189);'>minhas</text><text text-anchor='middle' transform='translate(-182,-47)rotate(0)' style='font-size: 13px; font-family: Impact; fill: rgb(173, 73, 74);'>seus</text><text text-anchor='middle' transform='translate(-43,274)rotate(-30)' style='font-size: 13px; font-family: Impact; fill: rgb(107, 110, 207);'>ninguém</text><text text-anchor='middle' transform='translate(-267,275)rotate(-30)' style='font-size: 13px; font-family: Impact; fill: rgb(57, 59, 121);'>mandato</text><text text-anchor='middle' transform='translate(223,-33)rotate(60)' style='font-size: 13px; font-family: Impact; fill: rgb(82, 84, 163);'>nova</text><text text-anchor='middle' transform='translate(-143,-30)rotate(0)' style='font-size: 11px; font-family: Impact; fill: rgb(140, 109, 49);'>tudo</text><text text-anchor='middle' transform='translate(-215,105)rotate(30)' style='font-size: 11px; font-family: Impact; fill: rgb(231, 186, 82);'>lula</text><text text-anchor='middle' transform='translate(-107,230)rotate(30)' style='font-size: 11px; font-family: Impact; fill: rgb(132, 60, 57);'>agora</text><text text-anchor='middle' transform='translate(-248,145)rotate(-60)' style='font-size: 11px; font-family: Impact; fill: rgb(214, 97, 107);'>dias</text><text text-anchor='middle' transform='translate(354,-68)rotate(60)' style='font-size: 11px; font-family: Impact; fill: rgb(231, 203, 148);'>michel</text><text text-anchor='middle' transform='translate(-444,-138)rotate(-60)' style='font-size: 11px; font-family: Impact; fill: rgb(181, 207, 107);'>dignidade</text><text text-anchor='middle' transform='translate(133,282)rotate(0)' style='font-size: 11px; font-family: Impact; fill: rgb(189, 158, 57);'>desenvolvimento</text><text text-anchor='middle' transform='translate(-297,-47)rotate(-60)' style='font-size: 11px; font-family: Impact; fill: rgb(206, 219, 156);'>viva</text><text text-anchor='middle' transform='translate(-245,-90)rotate(30)' style='font-size: 11px; font-family: Impact; fill: rgb(189, 158, 57);'>santa</text><text text-anchor='middle' transform='translate(82,28)rotate(60)' style='font-size: 10px; font-family: Impact; fill: rgb(107, 110, 207);'>você</text><text text-anchor='middle' transform='translate(-97,129)rotate(60)' style='font-size: 10px; font-family: Impact; fill: rgb(222, 158, 214);'>temos</text><text text-anchor='middle' transform='translate(236,123)rotate(60)' style='font-size: 10px; font-family: Impact; fill: rgb(82, 84, 163);'>amigos</text><text text-anchor='middle' transform='translate(70,-282)rotate(30)' style='font-size: 10px; font-family: Impact; fill: rgb(165, 81, 148);'>rousseff</text><text text-anchor='middle' transform='translate(147,119)rotate(-30)' style='font-size: 10px; font-family: Impact; fill: rgb(206, 109, 189);'>milhares</text><text text-anchor='middle' transform='translate(158,-109)rotate(30)' style='font-size: 10px; font-family: Impact; fill: rgb(231, 150, 156);'>amor</text><text text-anchor='middle' transform='translate(-155,279)rotate(0)' style='font-size: 10px; font-family: Impact; fill: rgb(57, 59, 121);'>liberdade</text><text text-anchor='middle' transform='translate(-10,-90)rotate(0)' style='font-size: 10px; font-family: Impact; fill: rgb(123, 65, 115);'>poder</text><text text-anchor='middle' transform='translate(-446,116)rotate(60)' style='font-size: 10px; font-family: Impact; fill: rgb(214, 97, 107);'>deputadas</text></g></svg>"
+
+
+  ?>
+
 <!DOCTYPE html>
+<head>
+<script src="../d3.min.js"></script>
+<script src="../jquery.js"></script>
+<script src="../bootstrap.js"></script>
+<script src="js/d3.parsets.js"></script>
+<script src="js/highlight.min.js"></script>
+<script src="js/jquery.mixitup.min.js"></script>
+<script src="js/bootpag.min.js"></script>
+<script src="js/c3.min.js"></script>
+<script src="js/main.js"></script>
+<script src="js/jquery.nav.js"></script>
+<link rel="stylesheet" href="css/animate.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<link rel="stylesheet" href="css/owl.carousel.css">
+<link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
+
 <meta charset="utf-8">
-<title>Parallel Sets</title>
+ <title>ImpeachmentVis</title>
+</head>
+
 <style>
 @import url(css/d3.parsets.css);
 @import url(css/bootstrap.css);
+@import url(css/c3.min.css);
 
 body {
-  font-family: sans-serif;
-  font-size: 16px;
-  width: 960px;
-  margin: 1em auto;
-  position: relative;
+    background-color: #fff;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 2;
+    font-size: 16px;
 }
-h1, h2, .dimension text {
-  text-align: center;
-  font-family: "PT Sans", Helvetica;
-  font-weight: 300;
+
+body > section {
+    padding: 85px 0;
 }
-h1 {
-  font-size: 4em;
-  margin: .5em 0 0 0;
-}
-h2 {
-  font-size: 2em;
-  margin: 1em 0 0.5em;
-  border-bottom: solid #ccc 1px;
-}
+
 p.meta, p.footer {
   font-size: 13px;
   color: #333;
@@ -36,7 +144,7 @@ p.meta {
 
 text.icicle { pointer-events: none; }
 
-.options { font-size: 12px; text-align: center; padding: 5px 0; }
+.options { font-size: 12px; text-align: center; padding: 5px 0; padding-left: 8%; }
 .curves { float: left; }
 .source { float: right; }
 pre, code { font-family: "Menlo", monospace; }
@@ -68,78 +176,509 @@ pre, code { font-family: "Menlo", monospace; }
 .javascript .special {
   color: #e6550d;
 }
+
+.axis path,
+.axis line{
+  fill: none;
+  stroke: black;
+}
+
+.tick line{
+    opacity: 0.2;
+}
+
+.point {
+        stroke: grey;
+        stroke-width: 3px;
+        opacity: 0;
+      }
+      .point:hover{
+        opacity: .5;
+      }
+}
+
+select option {
+  color: black;
+}
+select option:first-child {
+  color: grey;
+}
+select.empty {
+  color: grey;
+}
+/* Hidden placeholder */
+select option[disabled]:first-child {
+  display: none;
+}
+
+.sim {
+    display:inline-block;
+    position: relative;
+}
+.sim:after {
+    content:'';
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    background: #70d3ff;
+    opacity: 0.5;
+    border-radius: 7px;
+}
+
+.nao {
+    display:inline-block;
+    position: relative;
+}
+.nao:after {
+    content:'';
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    background: #ff5f68;
+    opacity: 0.5;
+    border-radius: 7px;
+}
+
+.umDeputado {
+    display: inline-block;
+    width: 20%;
+    padding-top: 2%;
+    float: left;
+}
+
+div#deputies {
+    text-align: center;
+    padding-bottom: 2%; 
+}
+
+.popover
+{
+  font-size: 14px;
+  max-width: 50%;
+}
+
+#selectChartCentralized {
+  padding-top: 50%;
+}
+
+.umaFala {
+  width: 25%;
+  display: inline-block;
+  float: left;
+  padding: 10px;
+}
+
+.umaFala .infoDeputado {
+  background-color: lightgrey;
+
+}
+
+.umaFala .fala 
+{
+  border: 3px solid lightgrey;
+  text-align: left;
+  padding: 7%;
+}
+
+#page-selection, #page-selection2, #page-selection3, #page-selection4
+{
+  float: right;
+}
+
+#aWord, #estadoDonut {
+  -webkit-animation-iteration-count: infinite; /* Chrome, Safari, Opera */
+  -webkit-animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+.brand {
+  -webkit-animation-iteration-count: infinite; /* Chrome, Safari, Opera */
+  -webkit-animation-duration: 5s;
+  animation-iteration-count: infinite;
+}
+
+#selectedWord
+{
+  color:#969292;
+}
+
+.svgCloud text
+{
+  cursor: pointer;
+}
+
+/*sections */
+
+h1, h2, h3,
+h4, h5, h6 {
+    font-family: 'Open Sans', sans-serif;
+  font-weight: normal;
+  margin: 0;
+}
+
+.clear:before,
+.clear:after {
+    content: " ";
+    display: table;
+}
+ 
+.clear:after {
+   clear: both;
+}
+ 
+.clear {
+   *zoom: 1;
+}
+
+body > section {
+    padding: 85px 0;
+}
+
+.section-title {
+  margin: 0 auto 10px;
+  width: 420px;
+}
+
+.section-title h2 {
+  color: black;
+  font-size: 25px;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+
+.section-title p {
+    line-height: 20px;
+    font-size: 15px;
+    color: #1f2021;
+    position: relative;
+}
+
+.sec-sub-title {
+  margin: 35px 0 45px;
+}
+
+.sec-sub-title p {
+  font-weight: 600;
+  line-height: 24px;
+  font-size: 18px;
+  color: #5b646e;
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+.kill-margin {
+    margin: 0 !important;
+}
+
+.devider {
+  margin-top: 30px;
+}
+.devider i {
+  color: #cccccc;
+}
+
+.devider:before,
+.devider:after {
+  content: "_____________________";
+  color: #e6e8ea;
+  position: relative;
+  bottom: 6px;
+}
+
+.devider:before {
+  right: 10px;
+}
+
+.devider:after {
+  left: 10px;
+}
+
+.mb50 {
+  margin-bottom: 50px;
+}
+
+/*************************
+*******Navigation******
+**************************/
+
+#navigation,
+.navbar-brand,
+.navbar-toggle,
+.navbar-nav > li > a,
+.search-form > #search-sub {
+  -webkit-transition: all 0.6s ease;
+     -moz-transition: all 0.6s ease;
+      -ms-transition: all 0.6s ease;
+       -o-transition: all 0.6s ease;
+          transition: all 0.6s ease;
+}
+
+.navigation .navbar-nav > li > a {
+  padding: 23px 25px;
+  color: #7D7D7D;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+#navigation {
+  background-color: black;
+  border-bottom: 4px solid #D5DBDA
+}
+
+.navigation .navbar-nav > li.current > a {
+  color: #fff;
+  border-bottom: 1px solid #fff
+}
+
+.navigation .navbar-nav > li > a:focus,
+.navigation .navbar-nav > li > a:hover {
+  background-color: transparent;
+  color: #fff;
+}
+
+.navbar-toggle {
+  border: 1px solid #fff;
+  margin-top: 21px;
+}
+
+.navbar-toggle .icon-bar {
+  background-color: #fff;
+}
+
+/*============================================================
+    Footer
+============================================================*/
+
+#footer {
+    background-color: #3F5654;
+    padding: 70px 0;
+    color: #fff;
+}
+
+.footer-content {
+    width: 600px;
+    margin: 0 auto;
+}
+
+.footer-content > div {
+    margin-bottom: 40px;
+}
+
+.footer-content > div > p:first-child {
+    margin-bottom: 15px;
+}
+
+.footer-content .footer-instituitions {
+    margin: 40px 0 35px;
+}
+
+.footer-instituitions ul {
+    list-style: outside none none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.footer-instituitions ul li {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.footer-content > p {
+    color: #ababab;
+    font-size: 12px;
+}
+
+/* links */
+
+a {
+    -webkit-transition: all .3s ease-in 0s;
+       -moz-transition: all .3s ease-in 0s;
+        -ms-transition: all .3s ease-in 0s;
+         -o-transition: all .3s ease-in 0s;
+            transition: all .3s ease-in 0s;
+}
+
+iframe {
+    border: 0;
+}
+
+a, a:focus, a:hover {
+    text-decoration: none;
+    outline: 0;
+}
+
+a:focus, a:hover {
+    color: "#000066";
+}
+
+#statesSection {
+  background-color: #F4F7F9
+}
+
+#home{
+  background-image: url('img/bgVis.png');
+  width: 1300px;
+  height: 700px;
+  background-size: cover;
+  border: solid 2px;
+  text-shadow: white 0px 0px 2px;
+}
+
+.carousel-caption {
+  top: 50%;
+  left: 40%;
+}
+
+
+.carousel-caption h2 {
+ font: 400 130px/0.8 'Cookie', Helvetica, sans-serif;
+  color: #fff;
+  text-shadow: 4px 4px 3px rgba(0,0,0,0.1);
+  color: black;
+}
+
+.logo h2 {
+ font: 400 50px/0.8 'Cookie', Helvetica, sans-serif;
+  color: #fff;
+  text-shadow: 4px 4px 3px rgba(0,0,0,0.1);
+  color: white;
+}
+
+.rotate {
+
+/* Safari */
+-webkit-transform: rotate(-20deg);
+
+/* Firefox */
+-moz-transform: rotate(-20deg);
+
+/* IE */
+-ms-transform: rotate(-20deg);
+
+/* Opera */
+-o-transform: rotate(-20deg);
+
+/* Internet Explorer */
+filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
+}
+
+#preloader {
+  background-color: #fff;
+  height: 100%;
+  position: fixed;
+  width: 100%;
+  z-index: 1100;
+}
+
+#preloader > img {
+  left: 47%;
+  position: absolute;
+  top: 48%;
+}
+
+.search {
+    float: right;
+    margin-right: 6px;
+    margin-top: -20px;
+    position: relative;
+    z-index: 2;
+}
+
 </style>
 
 <body>
-<h1>Parallel Sets</h1>
-<p class="meta">A visualisation technique for multidimensional categorical data.
+          <!-- preloader -->
+    <div id="preloader">
+      <img src="img/preloader.gif" alt="Preloader">
+    </div>
+    <!-- end preloader -->
+<!--
+        Fixed Navigation
+        ==================================== -->
+        <header id="navigation" class="navbar-fixed-top">
+            <div class="container">
+                     <div class="navbar-header">
+                    <!-- responsive nav button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <!-- /responsive nav button -->
+                    </div>
 
-<h2>Titanic Survivors</h2>
-<div id="vis"><noscript><img src="parsets.png"></noscript></div>
-<div class="options">
-  <span class="source">Data: <a href="http://www.amstat.org/publications/jse/v3n3/datasets.dawson.html">Robert J. MacG. Dawson</a>.</span>
-  <span class="curves"><label for="curved"><input type="checkbox" id="curved" onchange="curves.call(this)"> Curves?</label></span>
-</div>
+                    <!-- logo -->
+                    <a class="navbar-brand" href="#home">
+                      <div class = "logo">
+                         <h2>ImpeachmentVis</h2>
+                      </div>
+                  </a>
 
-<h2>Explanation</h2>
-<p>For each dimension (Survived, Sex, Age and Class), a horizontal bar is shown for each of its possible categories.  The width of the bar denotes the absolute number of matches for that category.
-<p>Starting with the first dimension (Survived), each of its categories is connected to a number of categories in the next dimension, showing how that category is subdivided. This subdividing is repeated recursively, producing a tree of “ribbons”.
-<p>In fact, you can imagine Parallel Sets as being an icicle plot, with icicles of the same category being “bundled” together.
-<p style="text-align: center"><label for="icicle" style="font-style: italic"><input type="checkbox" id="icicle"> Show icicle plot!</label>
-<p>Drag the dimensions and categories to reorder them. You can also click the “alpha” or “size” links that appear next to the dimension name on mouseover, to order the categories by name or frequency.
-
-<h2>Women and Children First?</h2>
-
-<p>We can see at a glance that the relative proportion of surviving women is far greater than that of the men.
-<p>As for children, it becomes clearer when we drag the <em>Age</em> dimension up: around half the children survived.  This is proportionally less than the women but more than the men.  Can you spot anything else interesting?
-
-<h2>Do It Yourself</h2>
-<p>The code is available as a reusable <a href="http://d3js.org/">D3.js</a> chart: <a href="http://github.com/jasondavies/d3-parsets">d3.parsets</a>.  This is a configurable function, which can be called on a D3 selection to produce an interactive SVG visualisation.
-<p>The input data should be bound to the target selection.  For input, you can either use an array of aggregated objects (pivot table) along with a <a href="http://github.com/jasondavies/d3-parsets#parsets_value">value</a> accessor, or you can simply use the full dataset and the grouped frequencies will be calculated automatically by default.
-
-<pre><code>var chart = d3.parsets()
-      .dimensions(["Survived", "Sex", "Age", "Class"]);
-
-var vis = d3.select("#vis").append("svg")
-    .attr("width", chart.width())
-    .attr("height", chart.height());
-
-d3.csv("titanic.csv", function(error, csv) {
-  vis.datum(csv).call(chart);
-});</code></pre>
+                     <!-- begin main nav -->
+                    <nav class="collapse navigation navbar-collapse navbar-right" role="navigation">
+                        <ul id="nav" class="nav navbar-nav">
+                            <li class="current"><a href="#home">Home</a></li>
+                            <li><a href="#parallel">Parallel Sets</a></li>
+                            <li><a href="#statesSection">Estados</a></li>
+                            <li><a href="#cloudSection">Word Cloud</a></li>
+                        </ul>
+                    </nav>
+                    <!-- /main nav -->
+                </div>
+        </header>
+        <!--
+        End Fixed Navigation
+        ==================================== -->
 
 
-<h2>Alternatives</h2>
-<p>For multivariate categorical data, the <a href="http://www.theusrus.de/blog/understanding-mosaic-plots/">mosaic plot</a> (or Marimekko chart) is a powerful alternative.  Personally, I think it’s easier to see the order in which the subsets were derived in a parallel sets visualisation.  On the other hand, it seems easier to spot small disparities in a mosaic plot because the subsets are laid out side-by-side.  Here is a <a href="http://bl.ocks.org/1005090">Marimekko chart</a> in D3.js by <a href="http://bost.ocks.org/mike/">Mike Bostock</a>.
-<p>For multivariate ordinal data (such as numeric data), <a href="http://en.wikipedia.org/wiki/Parallel_coordinates">parallel coordinates</a> are more appropriate, although you can often generate meaningful categories from such data for use with parallel sets.
+<section id="home">
+  <div class ="container">
+    <div class = "row">
+      <div id = 'dimae'>
+        <div class = "carousel-caption">
+        <h2 class="brand flash animated rotate">ImpeachmentVis</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<h2>Implementation Notes</h2>
+<section id = "parallel">
+  <div class = "container">
+    <div class= "row text-center">
+      <div class="section-title text-center mb50 fadeIn animated"> 
+        <h2>Parallel sets</h2>
+        <div class="devider"><i class="fa fa-laptop fa-lg"></i></div>
+      </div>
+      
+      <div class="sec-sub-title text-center">
+            <p>Com a técnica Parallel Sets você poderá visualizar os votos do Impeachment de uma forma bem interativa e interessante.
+               As categorias são manipuláveis, você pode alterar a disposição como quiser.
+            </p>
+          </div>
 
-<p>Probably the most interesting part of implementing this was supporting multiple concurrent transitions on the ribbons.  Strictly speaking this wasn’t necessary as it’s unlikely anyone would drag two things within the transition duration.  But who would pass up an opportunity to use a <a href="http://github.com/mbostock/d3/wiki/Transitions#wiki-tween">custom tween</a>?
-
-<p>This allows the <em>x-</em> and <em>y-</em> components of the ribbons to be animated independently, so that you can drag a dimension vertically even though a horizontal category animation is in progress.
-
-<p><label for="slow"><input type="checkbox" id="slow" onchange="vis.call(chart.duration(this.checked ? 5000 : 500))"> Go slow!</label>
-
-<p>In case you missed it, be sure to click on “icicle plots” in the Explanation section to see the animated transition.
-
-<p><a href="http://news.ycombinator.com/item?id=3878877">Discuss on HN!</a>
-
-<h2>Further Reading</h2>
-<ul>
-  <li>Functionality based on <a href="http://eagereyes.org/parallel-sets">Parallel Sets</a> by <a href="http://coitweb.uncc.edu/~rkosara/">Robert Kosara</a> and <a href="http://www.cs.brown.edu/people/cziemki/">Caroline Ziemkiewicz</a>.
-  <li><a href="http://kosara.net/publications/Kosara_BeautifulVis_2010.html">Turning a Table into a Tree: Growing Parallel Sets into a Purposeful Project</a> by Robert Kosara.
-  <li><a href="http://kosara.net/publications/Bendix_InfoVis_2005.html">Parallel Sets: Visual Analysis of Categorical Data</a> by Fabian Bendix, Robert Kosara, Helwig Hauser.
-</ul>
-
-<p class="footer">Made by <a href="http://www.jasondavies.com/">Jason Davies</a>.  Thanks to <a href="http://bost.ocks.org/mike">Mike Bostock</a> for his suggestions (and of course, <a href="http://d3js.org/">D3.js</a>!)
-
-<script src="../d3.min.js"></script>
-<script src="../jquery.js"></script>
-<script src="../bootstrap.js"></script>
-<script src="js/d3.parsets.js"></script>
-<script src="js/highlight.min.js"></script>
-<script src="js/jquery.mixitup.min.js"></script>
+      <div class="col-md-12"> 
+        <div id="vis"><noscript><img src="parsets.png"></noscript></div>
+        <div class="options text-center">
+          <span class="curves"><label for="curved"><input type="checkbox" id="curved" onchange="curves.call(this)"> Curvas?</label></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <script>
 var chart = d3.parsets()
@@ -323,28 +862,115 @@ d3.select("#file").on("change", function() {
 });
 </script>
 
-<style>
+  <section id = "statesSection">
 
-.axis path,
-.axis line{
-  fill: none;
-  stroke: black;
-}
+    <div class="section-title text-center mb50 fadeIn animated">
+        <h2>Estados</h2>
+        <div class="devider"><i class="fa fa-laptop fa-lg"></i></div>
+      </div>
+      
+      <div class="sec-sub-title text-center">
+            <p> Com o <i> Stacked Bar Chart </i> abaixo é possível ter uma noção de como os votos do Impeachment foram
+              evoluindo por estado e com a vantagem de ver individualmente cada deputado logo abaixo. Você poderá filtar os deputados por Estado, Partido, Gênero e Voto!
+            </p>
+          </div>
 
-.tick line{
-    opacity: 0.2;
-}
+    <div class = "container">
+      <div class= "row text-center">
+        <div class="col-md-12"> 
+          <div id="states"></div>
+        </div>
+      </div>
+    </div>
 
-.point {
-        stroke: grey;
-        stroke-width: 3px;
-        opacity: 0;
-      }
-      .point:hover{
-        opacity: .5;
-      }
-}
-</style>
+
+
+    <form class="form-inline">
+    <div class = "text-center">
+     <div class="form-group">
+      <label class="sr-only" for="selectState">Selecione um Estado</label>
+      <select class="form-control empty" id="selectState" onchange="myFunction()">
+        <option value="" selected>Selecione um Estado</option>
+        <?php foreach ($states as $s):?>
+          <option value = <?php echo "'" . $s  . "'" ?>> <?php echo $s; ?> </option>
+        <?php endforeach ?>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="sr-only" for="selectParties">Selecione um partido</label>
+      <select class="form-control empty" id="selectParties" onchange="myFunction()">
+        <option value="" selected>Selecione um partido</option>
+        <?php foreach ($parties as $p):?>
+          <option value = <?php echo "'" . $p  . "'" ?>> <?php echo $p; ?> </option>
+        <?php endforeach ?>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="sr-only" for="selectGender">Selecione um gênero</label>
+      <select class="form-control empty" id="selectGender" onchange="myFunction()">
+        <option value="" selected>Selecione um gênero</option>
+        <option value = "Masculino">Masculino</option>
+        <option value = "Feminino">Feminino</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="sr-only" for="selectVote">Selecione um tipo de voto</label>
+      <select class="form-control empty" id="selectVote" onchange="myFunction()">
+        <option value="" selected>Selecione um tipo de voto</option>
+        <option value = "Sim">Sim</option>
+        <option value = "Não">Não</option>
+      </select>
+    </div>
+    </div>
+  </form>
+
+  <div class = "container">
+      <div class = "row">
+        <div class="col-md-12">
+          <div id='page-selection'></div>
+        </div>
+      </div>
+    </div>
+
+    <div class = "container">
+      <div class = "row" style = "padding-bottom:50px;">
+        <div class="col-md-12">
+          <div id = 'deputies'></div>
+        </div>
+      </div>
+    </div>
+
+   <div class="sec-sub-title text-center">
+            <p> Os dois gráficos do tipo <i>Donut</i> abaixo mostram a distribuição dos votos a favor e contra levando em consideração
+              os partidos ou o gênero. Você pode filtrar os resultados por Estado também, basta escolher um lá acima!
+            </p>
+          </div>
+
+  <div class = "container">
+    <div class="row">
+        <div class="col-md-5"> 
+          <div id="chartPartidoSim" class = 'chart animated fadeInLeft' style ="display:block;"></div>
+          <div id="chartGeneroSim" class = 'chart animated fadeInLeft' style = "display:none;"></div>
+        </div>
+        <div class="col-md-2"> 
+          <div id= "selectChartCentralized" class="form-group">
+          <strong>
+            <h4><div id="estadoDonut" class ="text-center animated flash"></div></h4>
+          </strong>
+            <label class="sr-only" for="selectCharts">Select a Chart</label>
+            <select class="form-control empty" id="selectChart" onchange="showDonutChart()">
+              <option selected value = "Partido">Partido</option>
+              <option value = "Gênero">Gênero</option>
+            </select>
+            </div>
+        </div>
+        <div class="col-md-5"> 
+          <div id="chartPartidoNao" class = 'chart animated fadeInRight' style ="display:block;" ></div>
+          <div id="chartGeneroNao" class = 'chart animated fadeInRight' style = "display:none;"></div>
+        </div>
+      </div>
+  </div>
+ </section>
 
 <script>
 
@@ -387,7 +1013,7 @@ var margin = {top: 20, right: 55, bottom: 30, left: 40},
       var color = d3.scale.ordinal()
           .range(["#df2020","#345ee8"]);
 
-      var svg = d3.select("body").append("svg")
+      var svg = d3.select("#states").append("svg")
           .attr("width",  width  + margin.left + margin.right)
           .attr("height", height + margin.top  + margin.bottom)
         .append("g")
@@ -482,19 +1108,19 @@ var margin = {top: 20, right: 55, bottom: 30, left: 40},
             .style("text-anchor", "end")
             .text(function (d) { return d; });
 
-        svg.selectAll(".x.axis .tick")
+        /*svg.selectAll(".x.axis .tick")
             .style("cursor", "pointer")
-            .on("click", function(d) {showDistrict(d);})
+            .on("click", function(d) {showDistrict(d);})*/
 
         function showDistrict(d)
         {
-          var id = '#' + d;
-          //alert(id);
-          $('.deputies').hide();
-          $(id).show();
-          $(id).mixItUp();
-          $("#todos").addClass('active'); 
-          $('html, body').animate({ scrollTop: $(id).offset().top }, 'slow');
+          //alert(d);
+          resetFilters();
+          $("#deputies").removeClass();
+          myFunction(d);
+          $("#deputies").addClass(d);
+
+          $('html, body').animate({ scrollTop: $("#deputies").offset().top }, 'slow');
         }
 
         function removePopovers () {
@@ -520,242 +1146,90 @@ var margin = {top: 20, right: 55, bottom: 30, left: 40},
       });
 </script>
 
-<script>
 
-</script>
+  <script>
+    $( document ).ready(function() {
+      myFunction();
+      linkAllWords();
+  });
+  </script>
 
-<style>
-.sim {
-    display:inline-block;
-    position: relative;
-}
-.sim:after {
-    content:'';
-    top: 0;
-    left: 0;
-    z-index: 10;
-    width: 100%;
-    height: 100%;
-    display: block;
-    position: absolute;
-    background: #70d3ff;
-    opacity: 0.5;
-}
+<section id = "cloudSection">
 
-.nao {
-    display:inline-block;
-    position: relative;
-}
-.nao:after {
-    content:'';
-    top: 0;
-    left: 0;
-    z-index: 10;
-    width: 100%;
-    height: 100%;
-    display: block;
-    position: absolute;
-    background: #ff5f68;
-    opacity: 0.5;
-}
+  <div class="section-title text-center mb50 fadeIn animated">
+        <h2>Word Cloud</h2>
+        <div class="devider"><i class="fa fa-laptop fa-lg"></i></div>
+      </div>
+      
+      <div class="sec-sub-title text-center">
+            <p> Com a técnica Word Cloud é possível ver quais foram as principais palavras usadas pelos deputados durante a votação
+              e ao clicar em uma delas é possível ver todos os deputados que a usaram. Experimente!
+            </p>
+          </div>
 
-</style>
-
-<?php
-  
-  function removeAcentos($string, $slug = false) {
-    $string = strtolower($string);
-    // Código ASCII das vogais
-    $ascii['a'] = range(224, 230);
-    $ascii['e'] = range(232, 235);
-    $ascii['i'] = range(236, 239);
-    $ascii['o'] = array_merge(range(242, 246), array(240, 248));
-    $ascii['u'] = range(249, 252);
-    // Código ASCII dos outros caracteres
-    $ascii['b'] = array(223);
-    $ascii['c'] = array(231);
-    $ascii['d'] = array(208);
-    $ascii['n'] = array(241);
-    $ascii['y'] = array(253, 255);
-    foreach ($ascii as $key=>$item) {
-      $acentos = '';
-      foreach ($item AS $codigo) $acentos .= chr($codigo);
-      $troca[$key] = '/['.$acentos.']/i';
-    }
-    $string = preg_replace(array_values($troca), array_keys($troca), $string);
-    // Slug?
-    if ($slug) {
-      // Troca tudo que não for letra ou número por um caractere ($slug)
-      $string = preg_replace('/[^a-z0-9]/i', $slug, $string);
-      // Tira os caracteres ($slug) repetidos
-      $string = preg_replace('/' . $slug . '{2,}/i', $slug, $string);
-      $string = trim($string, $slug);
-    }
-    return $string;
-  }
-
-  $deputiesByState = array();
-  $deputiesAllInfo = array();
-  $servername = "localhost";
-  $username = "root";
-  $password = "";
-  $dbname = "Deputados";
-
-  // Create connection
-  $conn = new mysqli($servername, $username, $password, $dbname);
-  // Check connection
-  if ($conn->connect_error) {
-      die("Connection failed: " . $conn->connect_error);
-  } 
-
-  $sql = "SELECT * FROM impeatchment";
-  $result = $conn->query($sql);
-
-  if ($result->num_rows > 0) {
-      // output data of each row
-      while($row = $result->fetch_assoc()) {
-          $state = $row['Estado'];
-          $aDeputy = removeAcentos($row["Deputado"], '-') . "-" . strtolower($row['Partido']);
-          $deputiesByState[$state][] = $aDeputy;
-          $deputiesAllInfo[$aDeputy]['Deputado'] = $row["Deputado"];
-          $deputiesAllInfo[$aDeputy]['Partido'] = $row["Partido"];
-          $deputiesAllInfo[$aDeputy]['Estado'] = $row["Estado"];
-          $deputiesAllInfo[$aDeputy]['Voto'] = $row["Voto"];
-          $deputiesAllInfo[$aDeputy]['Fala'] = $row["Fala"];
-          $deputiesAllInfo[$aDeputy]['Genero'] = $row["Genero"];
-      }
-  } else {
-      echo "0 results";
-  }
-
-  $parties = array();
-
-  $sql = "SELECT DISTINCT Partido from impeatchment";
-  $result = $conn->query($sql);
-
-  if ($result->num_rows > 0) {
-      // output data of each row
-      while($row = $result->fetch_assoc()) {
-        $parties[] = $row['Partido'];
-      }
-  } else {
-      echo "0 results";
-  }
-
-  ?>
-
-  <style>
-
-  .dropdown {
-    position: relative;
-    display: inline-block;
-    margin-left: 40px;
-  }
-
-  .dropdown .btn {
-    width: 155px; 
-  }
-
-  </style>
-
-  <div class = "text-center">
-    <div class="dropdown">
-      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Partido
-      <span class="caret"></span></button>
-      <ul class="dropdown-menu">
-        <li><a href="javascript:;" data-filter="all" class="active filter">Todos Partidos</a></li>
-        <?php foreach ($parties as $p):?> 
-            <li> <a href="javascript:;" data-filter = <?php echo "'." . $p  . "'" ?> class="filter"> <?php echo $p ?> </a></li>
-        <?php endforeach?>
-      </ul>
+  <div class = "container">
+    <div class="row text-center svgCloud">
+        <div class = "col-md-12"> <?php echo $svgStaticCreated ?> </div>
     </div>
-
-    <div class="dropdown">
-      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Voto
-      <span class="caret"></span></button>
-      <ul class="dropdown-menu">
-        <li><a href="#">Sim</a></li>
-        <li><a href="#">Não</a></li>
-      </ul>
-    </div>
-
-    <div class="dropdown">
-      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Gênero
-      <span class="caret"></span></button>
-      <ul class="dropdown-menu">
-        <li> <a href="javascript:;" data-filter = '.Masculino' class="filter"> Masculino </a></li>
-        <li> <a href="javascript:;" data-filter = '.Feminino' class="filter"> Feminino </a></li>
-      </ul>
-    </div> 
   </div>
-  <?php
 
-  //echo "<div class = 'deputies'>";
+  <div class ="container">
+    <div class = "row text-center">
+    <div id = "selectedWord" style = "display:none;"> 
+        <h3>Palavra selecionada: </h3>
+        <h4>
+          <strong>
+            <div id="aWord" class ="animated flash"></div>
+          </strong>
+        </h4>
+        </div></div>
+      </div>
 
-  foreach ($deputiesByState as $key => $value) {
-    echo "<div class = 'deputies' style='display:none;' id = '" . $key . "'>";
-    foreach ($value as $index => $deputy) {
-        $voto = $deputiesAllInfo[$deputy]['Voto'] == "Sim" ? "sim" : "nao"; 
-        echo "<div class = 'mix ". $deputiesAllInfo[$deputy]['Partido'] . " " . $deputiesAllInfo[$deputy]['Genero'] .  "'>";
-          echo "<div class = '". $voto . "'>";
-            echo "<img align='left' class = 'img-rounded' src='img/deputados/" . $deputy . ".jpg'/>";
-          echo "</div>";
-        echo "</div>";
-    }
-    echo "</div>";
-  }
+  <div class ="container">
+    <div class ="row">
+      <div id='page-selection3'></div>
+    </div>
+    <div class ="row text-center">
+      <div id = "deputiesWords"></div>
+    </div>
+    <div class ="row">
+      <div id='page-selection2'></div>
+    </div>
+  </div>
+</section>
 
-  //echo "</div>";
-
-  $conn->close();
-?>
-
+<!-- 
+        #footer 
+        ====================================-->
+        <footer id="footer">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="footer-content">
+                        <div class="wow animated fadeInDown">
+                            <p>Aplicação desenvolvida por <a href="http://www.inf.ufrgs.br/~rnmsilva"> Rodrigo Moni</a></p>
+                        </div>
+                        <div class="footer-instituitions">
+                            <ul>
+                                <li class="logo wow animated zoomIn">
+                                    <a href="http://www.ufrgs.br">
+                                        <img src="img/ufrgs.png" alt="Logo UFRGS">
+                                    </a>
+                                </li>
+                                <li class="wow animated zoomIn" data-wow-delay="0.3s">
+                                    <a href="http://www.inf.ufrgs.br">
+                                        <img src="img/inf.png" alt="Logo INF">
+                                    </a>
+                                </li>
+                                <li class="wow animated zoomIn" data-wow-delay="0.6s">
+                                    <a href="http://www.inf.ufrgs.br/cg">
+                                        <img src="img/graphicsLab.png" alt = "Logo Grupo CG" width = "207" height = "68">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
 
 </body>
-
-<style>
-
-.deputies{
-  padding: 2% 2% 0;
-  text-align: justify;
-  font-size: 0.1px;
-  
-  -webkit-backface-visibility: hidden;
-}
-
-.deputies:after{
-  content: '';
-  display: inline-block;
-  width: 100%;
-}
-
-.deputies .mix,
-.deputies .gap{
-  display: inline-block;
-  width: 25%;
-}
-
-.deputies .mix{
-  text-align: left;
-  margin-bottom: 2%;
-  display: none;
-}
-
-.deputies .mix:after{
-  content: attr(data-myorder);
-  color: white;
-  font-size: 16px;
-  display: inline-block;
-  vertical-align: top;
-  padding: 4% 6%;
-  font-weight: 700;
-}
-
-.deputies .mix:before{
-  content: '';
-  display: inline-block;
-  padding-top: 60%;
-}
-
-
-</style>
